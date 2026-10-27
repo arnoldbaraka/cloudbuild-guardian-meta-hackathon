@@ -2,7 +2,7 @@
 
 **A verifiable AI incident-response engineer — built for the 2026 Meta Global AI Developer Hackathon.**
 
-![CI](https://img.shields.io/badge/tests-25%20passing-40dbc5)
+![CI](https://img.shields.io/badge/tests-29%20passing-40dbc5)
 ![Scope](https://img.shields.io/badge/execution-synthetic%20sandbox%20only-8056e7)
 ![Model](https://img.shields.io/badge/model-Meta%20Muse%20Spark%201.3-168dde)
 ![License](https://img.shields.io/badge/license-MIT-94a2bc)
@@ -50,19 +50,42 @@ Meta documentation: https://dev.meta.ai/docs/protocols/chat-completions
 - Model: muse-spark-1.3
 - Authentication: bearer token from your Meta Model API dashboard, used **server-side only**.
 - Mode: GUARDIAN_INFERENCE_MODE=meta
-- Call cap: GUARDIAN_META_MAX_CALLS=12 by default, count reserved before each attempt, no automatic retries.
+- Call cap: GUARDIAN_META_MAX_CALLS=3 by default, count reserved before each attempt, no automatic retries.
+- **Each call:** max_completion_tokens=1024, reasoning_effort=low, response_format=json_object.
+- **Important:** Meta's "Spend Limit" feature is an *alert*, not a hard cap. This application can limit requests per process but cannot guarantee you will not exceed an account-wide budget. Verify your promotional credits on Meta's Billing page and monitor Usage.
 
-Example (run in a private shell, do not commit the key):
+### Start spending credits — one verified, low-cost call
 
+1. Sign into https://dev.meta.ai/ and confirm the **$150 promotional credits** have been applied to your team's Billing page.
+2. Navigate to **API keys** and create a key. Never send that key in chat, GitHub, a webpage, or screenshots.
+3. Open your own SSH terminal on the development VPS, and run:
+
+       cd ~/work/cloudbuild-guardian-meta-hackathon
+       git pull --ff-only origin main
+       python3 -m guardian.activate
+
+4. The command prompts for your API key with hidden input. It sends **exactly one** small request to Meta with fabricated incident data. It prints a sanitized result with model attribution, token usage (when available), and whether the independent policy accepted the response. It never saves your key, does not run an autonomous patch, and leaves the existing scripted service unchanged. A non-interactive invocation refuses to make a call.
+
+### Optional: interactive local Meta-powered UI
+
+For a short-lived, explicitly authenticated SSH-only preview after the one-shot test passes:
+
+    cd ~/work/cloudbuild-guardian-meta-hackathon
     export GUARDIAN_INFERENCE_MODE=meta
-    export GUARDIAN_META_MAX_CALLS=8
+    export GUARDIAN_META_MAX_CALLS=3
+    export GUARDIAN_PORT=8099
+    export GUARDIAN_ACCESS_TOKEN="$(python3 -c 'import secrets; print(secrets.token_urlsafe(36))')"
     read -rs -p 'Meta Model API key: ' MODEL_API_KEY; echo
     export MODEL_API_KEY
     python3 -m guardian.server
 
-Never type API keys in GitHub issues, screenshots, ChatGPT messages, deployment YAML, screenshots of terminal output or web-client code. For shared deployment use a proper secret manager. Meta credits are tied to billing; the process call cap limits the number of attempts **not spend in dollars**. Monitor the API dashboard.
+Bind to localhost (the default). From your own computer, make an authenticated SSH tunnel to localhost:8099 and enter the GUARDIAN_ACCESS_TOKEN using the dashboard's "Protected deployment?" section. Do not expose this test service publicly. Meta mode **refuses to start** without a strong access token even on localhost. Stop the process after validation, and unset the key in that shell (`unset MODEL_API_KEY`).
 
-**No-pretend AI guarantee:** if meta mode is enabled but the API is unavailable, Guardian returns an error and refuses to fall back silently to its canned scripted response. The UI identifies each analysis source.
+Never type API keys in GitHub issues, screenshots, ChatGPT messages, deployment YAML, terminal transcripts or web-client code. For shared deployment use a proper secret manager and a reviewable authentication/TLS layer. Spending limits here are **request-count and per-request output-token bounds**, not a dollar cap. Monitor the API dashboard.
+
+Billing alert reference: https://dev.meta.ai/help/billing/spend-limit-alert
+
+**No-pretend AI guarantee:** if Meta mode is enabled but the API is unavailable, Guardian returns an error and refuses to fall back silently to its canned scripted response. The UI identifies each analysis source.
 
 ## Key safety design
 

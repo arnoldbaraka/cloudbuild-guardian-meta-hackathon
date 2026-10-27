@@ -78,6 +78,15 @@ class APITests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "Refusing non-loopback"):
                 serve()
 
+    def test_billable_meta_mode_requires_auth_even_on_loopback(self):
+        with patch.dict("os.environ", {
+            "GUARDIAN_INFERENCE_MODE": "meta",
+            "GUARDIAN_BIND_HOST": "127.0.0.1",
+            "GUARDIAN_ACCESS_TOKEN": "",
+        }):
+            with self.assertRaisesRegex(RuntimeError, "Meta billable mode"):
+                serve()
+
 
 if __name__ == "__main__":
     unittest.main()

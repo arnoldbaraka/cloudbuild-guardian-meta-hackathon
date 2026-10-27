@@ -31,6 +31,9 @@ class MetaClientTests(unittest.TestCase):
         parsed = client.diagnose(**self.inputs())
         self.assertEqual(parsed["proposed_action"], "correct_readiness_probe")
         self.assertEqual(recorded[0]["model"], "muse-spark-1.3")
+        self.assertEqual(recorded[0]["reasoning_effort"], "low")
+        self.assertEqual(recorded[0]["max_completion_tokens"], 1024)
+        self.assertEqual(recorded[0]["response_format"]["type"], "json_object")
         self.assertEqual(recorded[0]["messages"][0]["role"], "developer")
         self.assertEqual(client.last_usage["total_tokens"], 91)
 

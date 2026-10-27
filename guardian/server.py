@@ -22,7 +22,7 @@ MAX_ID_LENGTH = 64
 def new_guardian() -> Guardian:
     mode = os.environ.get("GUARDIAN_INFERENCE_MODE", "demo")
     if mode == "meta":
-        client = MetaClient(max_calls=int(os.environ.get("GUARDIAN_META_MAX_CALLS", "12")))
+        client = MetaClient(max_calls=int(os.environ.get("GUARDIAN_META_MAX_CALLS", "3")))
         return Guardian(mode="meta", model_client=client)
     if mode != "demo":
         raise ValueError("GUARDIAN_INFERENCE_MODE must be demo or meta")
@@ -168,6 +168,8 @@ def serve():
     token = os.environ.get("GUARDIAN_ACCESS_TOKEN", "")
     if host not in {"127.0.0.1", "::1", "localhost"} and len(token) < 24:
         raise RuntimeError("Refusing non-loopback bind without GUARDIAN_ACCESS_TOKEN (24+ chars)")
+    if os.environ.get("GUARDIAN_INFERENCE_MODE", "demo") == "meta" and len(token) < 24:
+        raise RuntimeError("Meta billable mode requires GUARDIAN_ACCESS_TOKEN (24+ chars), even on loopback")
     guardian = new_guardian()
     server = ThreadingHTTPServer((host, port), handler_factory(guardian, token))
     print(f"CloudBuild Guardian [{guardian.mode}] serving on http://{host}:{port}", flush=True)

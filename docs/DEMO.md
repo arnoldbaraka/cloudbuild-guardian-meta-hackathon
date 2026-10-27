@@ -13,7 +13,7 @@
 | 1:38–2:01 | Approve sandbox patch, then Verify outcome | "We change the simulated readiness path from /ready to /healthz. Guardian then independently compares the expected postcondition: two of two simulated pods ready." |
 | 2:01–2:22 | Open Evidence Ledger, show SHA256 chain and tamper test | "Every state transition has a hash-linked evidence record. Change an audit entry, and the integrity verification fails." |
 | 2:22–2:42 | Switch to OOM/image pull fixture, demonstrate independent gate | "The same engine handles memory exhaustion and unpullable images, but only within three narrowly specified actions." |
-| 2:42–3:00 | Architecture + repo + test run | "This is new hackathon code: Meta-model integration, a policy guard, human approval, verification and 25 passing tests. Our next milestone is a secure, separately tested read-only Kubernetes connector—not autonomous production patching." |
+| 2:42–3:00 | Architecture + repo + test run | "This is new hackathon code: Meta-model integration, a policy guard, human approval, verification and 29 passing tests. Our next milestone is a secure, separately tested read-only Kubernetes connector—not autonomous production patching." |
 
 **Never claim an AI-powered investigation occurred when using the scripted demo mode.**
 If live Meta inference is not available before recording, explicitly say the model connector was coded but not verified, and mark the corresponding stage as scripted or mocked. Do not present generated fixture results as real outages.

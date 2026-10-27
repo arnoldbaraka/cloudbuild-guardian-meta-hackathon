@@ -30,6 +30,7 @@ class MetaClient:
         self.lock = threading.Lock()
         self.transport = transport or self._request
         self.last_usage = {}
+        self.last_http_status = None
 
     def _request(self, body: bytes) -> dict:
         req = urllib.request.Request(self.ENDPOINT, method="POST", data=body, headers={
@@ -43,6 +44,10 @@ class MetaClient:
                 if len(raw) > 128 * 1024:
                     raise MetaInferenceError("Provider response too large")
                 return json.loads(raw)
+        except urllib.error.HTTPError as exc:
+            # Safe status code only. Do not print response bodies or authorization headers.
+            self.last_http_status = exc.code
+            raise MetaInferenceError("Meta API rejected the inference request") from None
         except (urllib.error.URLError, OSError, json.JSONDecodeError):
             # Never echo network error bodies or request details.
             raise MetaInferenceError("Meta inference request failed") from None
@@ -67,6 +72,9 @@ class MetaClient:
         )
         data = {
             "model": self.MODEL,
+            "reasoning_effort": "low",
+            "max_completion_tokens": 1024,
+            "response_format": {"type": "json_object"},
             "messages": [
                 {"role": "developer", "content": instruction},
                 {"role": "user", "content": json.dumps({
