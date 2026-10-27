@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#070d1d">
+  <meta name="description" content="CloudBuild Guardian: a verifiable AIOps incident recovery sandbox powered by Meta Muse Spark.">
+  <title>CloudBuild Guardian · AI Incident Command</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="background-grid" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="wordmark">
+      <div class="brand-icon" aria-hidden="true"><span>⌁</span></div>
+      <div><strong>CloudBuild<span class="accent"> Guardian</span></strong><small>AI INCIDENT COMMAND CENTER</small></div>
+    </div>
+    <nav class="topnav" aria-label="Navigation">
+      <span class="nav-current">Mission Control</span>
+      <a href="https://github.com/arnoldbaraka" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </nav>
+    <div class="connection"><i class="dot" id="connection-dot"></i><span id="connection-label">Connecting…</span></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <div class="eyebrow"><span class="pulse-dot"></span> META GLOBAL AI DEVELOPER HACKATHON · 2026</div>
+        <h1>Incidents happen.<br><span class="gradient-text">Recovery is engineered.</span></h1>
+        <p>Observe real-looking Kubernetes failures. Reason over evidence. Require human approval. Verify every simulated repair with a tamper-evident audit trail.</p>
+        <div class="feature-tags">
+          <span>◈ Evidence-first analysis</span>
+          <span>⬡ Human-in-the-loop</span>
+          <span>◇ Verifiable outcomes</span>
+        </div>
+      </div>
+      <div class="guardian-illustration" aria-hidden="true">
+        <div class="orbit orbit-1"></div><div class="orbit orbit-2"></div>
+        <div class="halo"></div>
+        <div class="bot"><div class="bot-antenna"></div><div class="bot-head"><div class="bot-face"><span class="eyes">● &nbsp; ●</span><span class="smile">⌣</span></div></div><div class="bot-body"><span>CB</span></div></div>
+        <div class="float-label label-a">EVIDENCE ✓</div>
+        <div class="float-label label-b">POLICY ✓</div>
+      </div>
+    </section>
+
+    <div class="guard-strip"><span>🔒 SAFETY BOUNDARY</span> Synthetic fixtures only · No production Kubernetes credentials · No shell execution · No autonomous remediation</div>
+
+    <section class="dashboard">
+      <div class="section-heading"><div><div class="section-kicker">THE WORKSPACE</div><h2>Incident response lab</h2></div><span class="lab-label">ISOLATED LAB · guardian-lab</span></div>
+      <div class="status-ribbon">
+        <div><small>INFERENCE ENGINE</small><strong id="engine-status">Checking…</strong></div>
+        <div><small>EXECUTION SCOPE</small><strong>Simulation only</strong></div>
+        <div><small>AUDIT INTEGRITY</small><strong id="integrity-status">Not started</strong></div>
+        <div><small>ACTIVE INCIDENT</small><strong id="incident-counter">None</strong></div>
+      </div>
+
+      <div class="workspace">
+        <aside class="panel scenarios-panel">
+          <div class="panel-heading"><span class="small-icon">01</span><div><h3>Choose an incident</h3><p>Three realistic failure cases</p></div></div>
+          <div id="scenario-list" class="scenario-list"><span class="muted">Loading scenarios…</span></div>
+          <button class="primary wide" id="create-incident" disabled>Launch simulated incident <span>→</span></button>
+          <div class="panel-footnote">All test data is fabricated and safe to share publicly.</div>
+        </aside>
+
+        <section class="panel main-panel">
+          <div class="panel-heading"><span class="small-icon">02</span><div><h3>Investigation workbench</h3><p id="current-title">Waiting for your first incident</p></div><span id="stage-badge" class="stage-badge">IDLE</span></div>
+          <div class="steps" role="list" aria-label="Response lifecycle"><div class="step" id="step-detect">01 <span>Detect</span></div><div class="step" id="step-reason">02 <span>Investigate</span></div><div class="step" id="step-approve">03 <span>Approve</span></div><div class="step" id="step-verify">04 <span>Verify</span></div></div>
+
+          <div id="empty-state" class="empty-state"><div class="empty-icon">⌘</div><h3>No active incident</h3><p>Select a failure scenario to start a guided, evidence-based remediation workflow.</p></div>
+          <div id="incident-detail" hidden>
+            <div class="subheading"><span class="subheading-dot"></span> OBSERVATIONS <span id="observation-count"></span></div>
+            <div id="observations" class="observations"></div>
+            <div id="diagnosis-section" hidden><div class="subheading"><span class="subheading-dot violet"></span> ANALYSIS <span id="diagnosis-source" class="analysis-source"></span></div><div class="diagnosis-card"><h4 id="root-cause"></h4><p id="reasoning"></p><div id="evidence-chips" class="evidence-chips"></div></div></div>
+            <div id="proposal-section" hidden><div class="subheading"><span class="subheading-dot amber"></span> PROPOSED ACTION</div><div class="proposal-card"><div class="proposal-label">APPROVAL REQUIRED</div><strong id="proposal-action"></strong><code id="patch-preview"></code><p class="simulation-note">The change will affect synthetic, in-memory data only.</p></div></div>
+            <div id="verification-section" hidden><div class="subheading"><span class="subheading-dot green"></span> INDEPENDENT VERIFICATION</div><div class="verification-card"><span id="verification-symbol">✓</span><div><h4 id="verification-title"></h4><p id="verification-proof"></p></div></div></div>
+            <div class="action-row">
+              <button id="investigate" class="primary" hidden>Analyze evidence <span>↗</span></button>
+              <button id="approve" class="primary" hidden>Approve simulation <span>✓</span></button>
+              <button id="reject" class="secondary" hidden>Reject</button>
+              <button id="verify" class="primary" hidden>Verify outcome <span>✓</span></button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel audit-panel">
+          <div class="panel-heading"><span class="small-icon">03</span><div><h3>Evidence ledger</h3><p>Chain-linked audit events</p></div></div>
+          <div id="audit-events" class="audit-events"><div class="no-events">Your incident timeline will appear here.</div></div>
+          <div class="ledger-foot"><span>SHA-256 CHAIN</span><code id="audit-short-hash">Not initialized</code></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="lower-grid">
+      <div class="lower-panel"><span class="lower-icon">⌁</span><div><h3>Model-powered reasoning</h3><p>Switch to Meta mode to use Muse Spark 1.3 with your own server-side API key. Demo mode is scripted and clearly labeled—not fake AI.</p></div></div>
+      <div class="lower-panel"><span class="lower-icon">◇</span><div><h3>Built for trust</h3><p>Every proposal is checked against independent sandbox policy; approval and evidence validation are mandatory before success is claimed.</p></div></div>
+    </section>
+
+    <section class="access-section" id="access-section">
+      <div><h3>Protected deployment?</h3><p>If an access token is configured on the server, enter it here. The token stays in this tab's memory and is never included in the URL.</p></div>
+      <div class="access-input"><input id="access-token" type="password" autocomplete="off" placeholder="Guardian access token (optional)" aria-label="Guardian access token"><button id="connect" class="secondary">Connect</button></div>
+    </section>
+  </main>
+  <footer><span>CloudBuild Guardian · Built for the 2026 Meta Global AI Developer Hackathon</span><span><b>FROM IDEA TO PRODUCTION</b> · An isolated technical demonstration</span></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

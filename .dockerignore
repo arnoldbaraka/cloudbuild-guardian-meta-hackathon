@@ -1,0 +1,13 @@
+.git
+.github
+.env
+.env.*
+__pycache__
+*.pyc
+*.log
+*.key
+*.pem
+*.sqlite
+tests
+docs
+out
