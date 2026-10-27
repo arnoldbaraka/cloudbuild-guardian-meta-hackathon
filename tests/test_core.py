@@ -102,6 +102,19 @@ class CoreSafetyTests(unittest.TestCase):
             g.investigate(incident["id"])
         self.assertEqual(g.get(incident["id"])["stage"], "detected")
 
+    def test_model_cannot_cite_only_irrelevant_evidence(self):
+        class MissingCorroboration:
+            def diagnose(self, **kwargs):
+                return {"root_cause": "Wrong path", "reasoning": "Only one event",
+                        "proposed_action": "correct_readiness_probe",
+                        "evidence_ids": ["OBS-01"]}
+        g = Guardian(mode="meta", model_client=MissingCorroboration())
+        incident = g.create("readiness")
+        with self.assertRaises(GuardianError) as ctx:
+            g.investigate(incident["id"])
+        self.assertEqual(ctx.exception.status, 409)
+        self.assertTrue(g.check_ledger(incident["id"]))
+
     def test_valid_meta_proposal_still_requires_approval(self):
         g = Guardian(mode="meta", model_client=GoodModel())
         start = g.create("readiness")

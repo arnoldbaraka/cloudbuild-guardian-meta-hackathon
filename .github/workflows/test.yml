@@ -19,3 +19,9 @@ jobs:
         run: python3 -m compileall -q guardian tests
       - name: JS syntax
         run: node --check guardian/static/app.js
+      - name: Build independent OCI image
+        run: docker build --tag cloudbuild-guardian:ci .
+      - name: Container imports and non-root user
+        run: |
+          docker run --rm --entrypoint python cloudbuild-guardian:ci -c "import guardian.core,guardian.server; print('guardian imports OK')"
+          docker run --rm --entrypoint id cloudbuild-guardian:ci -u

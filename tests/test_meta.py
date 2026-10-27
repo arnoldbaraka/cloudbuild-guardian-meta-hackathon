@@ -49,6 +49,19 @@ class MetaClientTests(unittest.TestCase):
         with self.assertRaises(MetaInferenceError):
             client.diagnose(**self.inputs())
 
+    def test_fenced_json_response_is_supported(self):
+        fence = chr(96) * 3
+        diagnosis = {"root_cause": "Wrong health path",
+                     "reasoning": "Probe errors match observed endpoint response",
+                     "proposed_action": "correct_readiness_probe",
+                     "evidence_ids": ["OBS-01"]}
+        def transport(body):
+            return {"choices": [{"message": {"content":
+                fence + "json\n" + json.dumps(diagnosis) + "\n" + fence}}]}
+        client = MetaClient(api_key="fake", transport=transport)
+        self.assertEqual(client.diagnose(**self.inputs())["root_cause"],
+                         "Wrong health path")
+
     def test_missing_key_does_not_start_meta_client(self):
         with self.assertRaises(ValueError):
             MetaClient(api_key="", transport=lambda body: {})

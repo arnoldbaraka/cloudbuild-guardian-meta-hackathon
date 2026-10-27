@@ -2,7 +2,7 @@
 
 **A verifiable AI incident-response engineer — built for the 2026 Meta Global AI Developer Hackathon.**
 
-![CI](https://img.shields.io/badge/tests-23%20passing-40dbc5)
+![CI](https://img.shields.io/badge/tests-25%20passing-40dbc5)
 ![Scope](https://img.shields.io/badge/execution-synthetic%20sandbox%20only-8056e7)
 ![Model](https://img.shields.io/badge/model-Meta%20Muse%20Spark%201.3-168dde)
 ![License](https://img.shields.io/badge/license-MIT-94a2bc)
